@@ -6,6 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
+
+
+
 const AddQuestion = ({ params }) => {
   const [question, setQuestion] = useState("");
   const [options, setOptions] = useState(["", "", "", ""]); // Array for 4 options
