@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const Jobs = ({ jobs }) => {
   return (
     <div className="space-y-6 mx-4">
@@ -11,7 +13,18 @@ const Jobs = ({ jobs }) => {
             <p className="text-lg text-gray-600 mb-2">
               {job.company} - {job.location}
             </p>
-            <p className="text-gray-600 mb-4">{job.description}</p>
+            <div className="text-gray-600 mb-4">
+              {/* Truncate description to 400 characters */}
+              {job.description.length > 200 ? (
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: job.description.substring(0, 200) + "...",
+                  }}
+                />
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: job.description }} />
+              )}
+            </div>
             <div className="flex flex-wrap gap-x-4 gap-y-2 mb-4">
               <span className="text-sm font-medium text-gray-700 bg-gray-100 px-3 py-1 rounded-full">
                 {job.jobType}
@@ -23,14 +36,12 @@ const Jobs = ({ jobs }) => {
                 Experience: {job.experience} years
               </span>
             </div>
-            <a
-              href={job.applyLink}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={`/government-jobs/${job._id}`} // Redirect to the job details page
               className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200"
             >
-              Apply Here
-            </a>
+              Read More
+            </Link>
           </div>
         ))
       ) : (

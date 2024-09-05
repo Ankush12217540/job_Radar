@@ -1,81 +1,59 @@
 "use client";
-import { useState } from "react";
 import Link from "next/link";
-import { CiMenuBurger } from "react-icons/ci";
-import { IoMdClose } from "react-icons/io";
-import { redirect } from "next/dist/server/api-utils";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
+import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  
   return (
-    <nav className="flex justify-between items-start p-4  my-2">
-      <div className="flex items-center gap-x-8">
-        <div className="flex flex-col items-start justify-center">
-          <Link href={"/"} className={"text-2xl font-bold"}>
-            Job Radar
-          </Link>
-          {isOpen && (
-            <div className="md:hidden mt-4 flex flex-col items-start gap-y-4 ">
-              <Link href="/" className="hover:text-zinc-400">
-                Jobs
-              </Link>
-              <Link href="/mocks" className="hover:text-zinc-400">
-                Mock Exams
-              </Link>
+    <nav className="flex flex-wrap justify-between items-center p-4 border-b">
+      <Link href="/" className="text-3xl font-bold text-blue-600">
+        Job Radar
+      </Link>
 
-              <div className="flex flex-col md:flex-row gap-4">
-                <Link
-                  href={"/login"}
-                  className="py-2 px-6 border-2 border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white"
-                >
-                  Login
-                </Link>
-                <Link
-                  href={"/register"}
-                  className="py-2 px-6 rounded-full bg-orange-500 text-white"
-                >
-                  Register
-                </Link>
-              </div>
-            </div>
-          )}
-        </div>
+      {/* Menu items, available on all screen sizes */}
+      <div className="w-full lg:w-auto flex flex-col lg:flex-row gap-y-2 lg:gap-y-0 lg:gap-x-8 text-lg text-gray-800 mt-4 lg:mt-0">
+        <Link href="/" className="hover:text-blue-500">
+          Private Jobs
+        </Link>
+        <Link href="/government-jobs" className="hover:text-blue-500">
+          Government Jobs
+        </Link>
 
-        <div className="hidden md:flex items-center gap-x-8">
-          <Link href="/" className="hover:text-zinc-400">
-            Jobs
-          </Link>
-          <Link href="/mocks" className="hover:text-zinc-400">
-            Mock Exams
-          </Link>
-        </div>
+        <Menubar>
+          <MenubarMenu>
+            <MenubarTrigger className="focus:outline-none hover:text-blue-500">
+              Mock Tests
+            </MenubarTrigger>
+            <MenubarContent>
+              <MenubarItem>
+                <Link href="/mocks/private">Private Tests</Link>
+              </MenubarItem>
+              <MenubarItem>
+                <Link href="/mocks/government">Government Tests</Link>
+              </MenubarItem>
+            </MenubarContent>
+          </MenubarMenu>
+        </Menubar>
       </div>
 
-      <div className="hidden md:flex gap-x-4">
-        <Link
-          href={"/login"}
-          className="py-2 px-6 border-2 border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white"
-        >
-          Login
+      {/* Login and Register Buttons */}
+      <div className="w-full lg:w-auto flex flex-col lg:flex-row gap-y-2 lg:gap-x-4 mt-4 lg:mt-0">
+        <Link href="/login">
+          <Button variant="outline" className="w-full lg:w-auto">
+            Login
+          </Button>
         </Link>
-        <Link
-          href={"/register"}
-          className="py-2 px-6 rounded-full bg-orange-500 text-white"
-        >
-          Register
+        <Link href="/register">
+          <Button className="w-full lg:w-auto bg-orange-500 text-white hover:bg-orange-600">
+            Register
+          </Button>
         </Link>
-      </div>
-
-      <div className="md:hidden">
-        <button onClick={toggleMenu} className="focus:outline-none">
-          {isOpen ? <IoMdClose size={24} /> : <CiMenuBurger size={24} />}
-        </button>
       </div>
     </nav>
   );

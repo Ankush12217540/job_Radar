@@ -33,7 +33,7 @@ const Register = () => {
     e.preventDefault();
     setLoading(true); // Start loading
     try {
-      const res = await axios.post("http://localhost:8000/api/users/register", {
+      const res = await axios.post("https://jobradar-backend-1.onrender.com/api/users/register", {
         email,
         password,
         name,
@@ -73,11 +73,11 @@ const Register = () => {
           className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <Label htmlFor="email" className="text-gray-600">
-          Email
+          Email / Phone
         </Label>
         <Input
-          type="email"
-          placeholder="Email"
+          type="text"
+          placeholder="Email / Phone"
           onChange={handleEmailChange}
           className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />

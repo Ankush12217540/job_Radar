@@ -7,7 +7,7 @@ import axios from "axios";
 import Loader from "@/components/Loader";
 import SearchBar from "@/components/SearchBar";
 
-export default function PrivateJobs() {
+export default function GovernmentJobs() {
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,11 +16,11 @@ export default function PrivateJobs() {
     const fetchJobs = async () => {
       try {
         const res = await axios.get("https://jobradar-backend-1.onrender.com/api/jobs");
-        const privateJobs = res.data.data.filter(
-          (job) => job.jobSector === "Private"
+        const governmentJobs = res.data.data.filter(
+          (job) => job.jobSector === "Government"
         );
-        setJobs(privateJobs);
-        setFilteredJobs(privateJobs);
+        setJobs(governmentJobs);
+        setFilteredJobs(governmentJobs);
         setLoading(false);
       } catch (error) {
         console.log(error);

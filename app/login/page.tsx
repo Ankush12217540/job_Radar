@@ -26,7 +26,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true); // Start loading
     try {
-      const res = await axios.post("http://localhost:8000/api/users/login", {
+      const res = await axios.post("https://jobradar-backend-1.onrender.com/api/users/login", {
         email,
         password,
       });
@@ -56,11 +56,11 @@ const Login = () => {
           Login to continue!
         </h1>
         <Label htmlFor="email" className="text-gray-600">
-          Email
+          Email / Phone
         </Label>
         <Input
-          type="email"
-          placeholder="Email"
+          type="text"
+          placeholder="Email / Phone"
           onChange={handleEmailChange}
           className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />

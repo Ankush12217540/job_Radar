@@ -1,11 +1,15 @@
 "use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import { Toast as toast } from "@/components/ui/toast";
+import dynamic from "next/dynamic";
+import "react-quill/dist/quill.snow.css"; // ReactQuill styles
+
+// Dynamically import React Quill to avoid SSR issues
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const AddExam = () => {
   const [examName, setExamName] = useState("");
@@ -14,7 +18,29 @@ const AddExam = () => {
   const [examDuration, setExamDuration] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [examList, setExamList] = useState([]);
+  const [fetchingExams, setFetchingExams] = useState(true); // New loading state for fetching exams
+  const [error, setError] = useState(""); // Error state
+
   const router = useRouter();
+
+  // Fetch existing exams
+  useEffect(() => {
+    const fetchExams = async () => {
+      try {
+        const response = await axios.get(
+          "https://jobradar-backend-1.onrender.com/api/mock/exams"
+        );
+        setExamList(response.data.exams);
+      } catch (error) {
+        setError("Error fetching exams.");
+      } finally {
+        setFetchingExams(false); // Stop loading state
+      }
+    };
+
+    fetchExams();
+  }, []);
 
   const handleInputChange = () => {
     setIsDisabled(!examName || !examDescription || !examDate || !examDuration);
@@ -24,98 +50,142 @@ const AddExam = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8000/api/mock/exam", {
+      const res = await axios.post("https://jobradar-backend-1.onrender.com/api/mock/exam", {
         examName,
         examDescription,
         examDate,
         examDuration,
       });
 
-      console.log(res.data);
-
       if (res.data) {
-        router.replace("/mocks");
-      } // Redirect to home or another page after successful creation
+        // Clear form after successful submission
+        setExamName("");
+        setExamDescription("");
+        setExamDate("");
+        setExamDuration("");
+        setIsDisabled(true);
+      }
     } catch (error) {
-      console.error("Error creating exam:", error);
-      toast.error("An error occurred. Please try again.");
+      setError("Error creating exam.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen mx-4">
-      <form
-        className="flex flex-col justify-center gap-5 w-full md:w-1/3 bg-white p-8 rounded-lg shadow-xl"
-        onSubmit={handleSubmit}
-      >
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Add a New Exam
-        </h1>
-        <Label htmlFor="examName" className="text-gray-700">
-          Exam Name
-        </Label>
-        <Input
-          type="text"
-          placeholder="Enter Exam Name"
-          value={examName}
-          onChange={(e) => {
-            setExamName(e.target.value);
-            handleInputChange();
-          }}
-          className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <Label htmlFor="examDescription" className="text-gray-700">
-          Exam Description
-        </Label>
-        <textarea
-          placeholder="Enter Exam Description"
-          value={examDescription}
-          onChange={(e) => {
-            setExamDescription(e.target.value);
-            handleInputChange();
-          }}
-          className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden"
-          style={{ minHeight: "100px", maxHeight: "300px" }}
-        />
-        <Label htmlFor="examDate" className="text-gray-700">
-          Exam Date
-        </Label>
-        <Input
-          type="date"
-          value={examDate}
-          onChange={(e) => {
-            setExamDate(e.target.value);
-            handleInputChange();
-          }}
-          className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <Label htmlFor="examDuration" className="text-gray-700">
-          Exam Duration (minutes)
-        </Label>
-        <Input
-          type="number"
-          placeholder="120"
-          value={examDuration}
-          onChange={(e) => {
-            setExamDuration(e.target.value);
-            handleInputChange();
-          }}
-          className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <Button
-          type="submit"
-          disabled={isDisabled || loading}
-          className={`p-3 mt-4 rounded-md text-white ${
-            isDisabled || loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600"
-          } hover:bg-blue-700 transition duration-200`}
-        >
-          {loading ? "Creating Exam..." : "Create Exam"}
-        </Button>
-      </form>
+    <div className="max-w-7xl mx-auto mt-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Left Column: Add Exam Form */}
+        <div className="bg-white p-8 shadow-lg rounded-lg">
+          <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
+            Add a New Exam
+          </h1>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <Label htmlFor="examName" className="text-gray-700">
+                Exam Name
+              </Label>
+              <Input
+                type="text"
+                placeholder="Enter Exam Name"
+                value={examName}
+                onChange={(e) => {
+                  setExamName(e.target.value);
+                  handleInputChange();
+                }}
+                className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div className="mb-4">
+              <Label htmlFor="examDescription" className="text-gray-700">
+                Exam Description
+              </Label>
+              <ReactQuill
+                value={examDescription}
+                onChange={(value) => {
+                  setExamDescription(value);
+                  handleInputChange();
+                }}
+                className="rounded-md"
+              />
+            </div>
+            <div className="mb-4">
+              <Label htmlFor="examDate" className="text-gray-700">
+                Exam Date
+              </Label>
+              <Input
+                type="date"
+                value={examDate}
+                onChange={(e) => {
+                  setExamDate(e.target.value);
+                  handleInputChange();
+                }}
+                className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div className="mb-4">
+              <Label htmlFor="examDuration" className="text-gray-700">
+                Exam Duration (minutes)
+              </Label>
+              <Input
+                type="number"
+                placeholder="120"
+                value={examDuration}
+                onChange={(e) => {
+                  setExamDuration(e.target.value);
+                  handleInputChange();
+                }}
+                className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            {error && <p className="text-red-500">{error}</p>}
+            <Button
+              type="submit"
+              disabled={isDisabled || loading}
+              className={`p-3 mt-4 rounded-md text-white ${
+                isDisabled || loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-600"
+              } hover:bg-blue-700 transition duration-200`}
+            >
+              {loading ? "Creating Exam..." : "Create Exam"}
+            </Button>
+          </form>
+        </div>
+        {/* Right Column: List of Exams */}
+        <div className="bg-white p-8 shadow-lg rounded-lg">
+          <h2 className="text-3xl font-bold mb-6 text-center">All Exams</h2>
+          {fetchingExams ? (
+            <p>Loading exams...</p>
+          ) : examList.length > 0 ? (
+            <ul className="space-y-4">
+              {examList.map((exam) => (
+                <li
+                  key={exam._id}
+                  className="p-4 border border-gray-300 rounded-md hover:bg-gray-50"
+                >
+                  <h3 className="text-xl font-semibold">{exam.examName}</h3>
+                  <p className="text-gray-600">
+                    {new Date(exam.examDate).toLocaleDateString()}
+                  </p>
+                  <p className="text-gray-600">
+                    Duration: {exam.examDuration} minutes
+                  </p>
+                  <p className="mt-2 text-blue-600 hover:underline">
+                    <a
+                      href={`add-exams/${exam._id}`} // Redirect to add questions page with the examId
+                    >
+                      Add Questions
+                    </a>
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No exams available.</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

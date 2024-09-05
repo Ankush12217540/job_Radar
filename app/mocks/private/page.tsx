@@ -31,9 +31,7 @@ const ExamPage = () => {
   const stripHtml = (html) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     const textContent = doc.body.textContent || "";
-    return textContent.length > 400
-      ? textContent.substring(0, 400) + "..."
-      : textContent;
+    return textContent.length > 400 ? textContent.substring(0, 400) + "..." : textContent;
   };
 
   const handleSearch = (query) => {
