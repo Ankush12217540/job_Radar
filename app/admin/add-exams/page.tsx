@@ -21,6 +21,7 @@ const AddExam = () => {
   const [examList, setExamList] = useState([]);
   const [fetchingExams, setFetchingExams] = useState(true); // New loading state for fetching exams
   const [error, setError] = useState(""); // Error state
+  const [deletingExamId, setDeletingExamId] = useState(null); // Track the exam being deleted
 
   const router = useRouter();
 
@@ -64,11 +65,32 @@ const AddExam = () => {
         setExamDate("");
         setExamDuration("");
         setIsDisabled(true);
+
+        // Refresh exam list
+        setExamList((prevExams) => [...prevExams, res.data.exam]);
       }
     } catch (error) {
       setError("Error creating exam.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Handle deleting an exam
+  const handleDeleteExam = async (examId) => {
+    const confirmation = confirm("Are you sure you want to delete this exam?");
+    if (!confirmation) return;
+
+    setDeletingExamId(examId);
+    try {
+      await axios.delete(`https://jobradar-backend-1.onrender.com/api/mock/exam/${examId}`);
+      setExamList((prevExams) =>
+        prevExams.filter((exam) => exam._id !== examId)
+      ); // Remove the deleted exam from the state
+    } catch (error) {
+      setError("Error deleting exam.");
+    } finally {
+      setDeletingExamId(null); // Reset the deleting state
     }
   };
 
@@ -178,6 +200,19 @@ const AddExam = () => {
                       Add Questions
                     </a>
                   </p>
+                  <Button
+                    onClick={() => handleDeleteExam(exam._id)}
+                    disabled={deletingExamId === exam._id}
+                    className={`mt-2 rounded-md text-white ${
+                      deletingExamId === exam._id
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-red-600"
+                    } hover:bg-red-700 transition duration-200`}
+                  >
+                    {deletingExamId === exam._id
+                      ? "Deleting..."
+                      : "Delete Exam"}
+                  </Button>
                 </li>
               ))}
             </ul>

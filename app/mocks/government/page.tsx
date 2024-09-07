@@ -31,8 +31,8 @@ const ExamPage = () => {
   const stripHtml = (html) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     const textContent = doc.body.textContent || "";
-    return textContent.length > 400
-      ? textContent.substring(0, 400) + "..."
+    return textContent.length > 75
+      ? textContent.substring(0, 75) + "..."
       : textContent;
   };
 
@@ -42,6 +42,11 @@ const ExamPage = () => {
       exam.examName.toLowerCase().includes(lowercasedQuery)
     );
     setFilteredExams(filtered);
+  };
+
+  const handleAttempt = (examId) => {
+    // Navigate to the quiz page for the selected exam
+    router.push(`/mock/${examId}/quiz`);
   };
 
   return (
@@ -75,13 +80,23 @@ const ExamPage = () => {
               Questions: {exam.examQuestions.length}
             </p>
 
-            {/* Add "Read More" button linking to detailed exam page */}
-            <Link
-              href={`/mocks/exams/${exam._id}`}
-              className="inline-block mt-4 text-blue-600 hover:underline"
-            >
-              Read More
-            </Link>
+            <div className="flex justify-between items-center">
+              {/* Attempt button */}
+              <button
+                onClick={() => handleAttempt(exam._id)}
+                className="text-blue-600 hover:underline"
+              >
+                Attempt
+              </button>
+
+              {/* Read More link */}
+              <Link
+                href={`/mocks/exams/${exam._id}`}
+                className="text-blue-600 hover:underline"
+              >
+                Read More
+              </Link>
+            </div>
           </li>
         ))}
       </ul>

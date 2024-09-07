@@ -77,6 +77,17 @@ const AddJob = () => {
       alert("There was an error adding the job. Please try again.");
     }
   };
+  // Handle job deletion
+  const handleDelete = async (jobId) => {
+    try {
+      await axios.delete(`https://jobradar-backend-1.onrender.com/api/jobs/${jobId}`);
+      alert("Job deleted successfully!");
+      setJobList(jobList.filter((job) => job._id !== jobId)); // Update job list after deletion
+    } catch (error) {
+      console.log("Error deleting job:", error);
+      alert("There was an error deleting the job. Please try again.");
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto mt-8">
@@ -313,6 +324,12 @@ const AddJob = () => {
                       Apply Here
                     </a>
                   </p>
+                  <button
+                    onClick={() => handleDelete(job._id)}
+                    className="mt-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                  >
+                    Delete
+                  </button>
                 </li>
               ))}
             </ul>

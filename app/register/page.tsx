@@ -41,6 +41,7 @@ const Register = () => {
       console.log(res.data);
       if (res.data.success) {
         alert("Registration successful!");
+        sessionStorage.setItem("isLoggedIn", "true");
         router.push("/");
         // Optionally redirect to a login page or dashboard
       } else {

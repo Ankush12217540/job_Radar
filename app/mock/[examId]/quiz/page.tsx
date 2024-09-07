@@ -7,11 +7,9 @@ const MockTest = ({ params }) => {
   const { examId } = params;
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [score, setScore] = useState(0);
+  const [selectedOptions, setSelectedOptions] = useState({});
   const [quizFinished, setQuizFinished] = useState(false);
-  const [showExplanation, setShowExplanation] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(null);
+  const [score, setScore] = useState(0);
 
   const router = useRouter();
 
@@ -30,26 +28,30 @@ const MockTest = ({ params }) => {
     fetchQuestions();
   }, [examId]);
 
+  const handleOptionSelect = (option) => {
+    setSelectedOptions((prev) => ({
+      ...prev,
+      [currentQuestionIndex]: option,
+    }));
+  };
+
   const handleNextQuestion = () => {
-    if (selectedOption === questions[currentQuestionIndex].correctAnswer) {
-      setScore(score + 1);
-    }
-
-    setSelectedOption(null);
-    setShowExplanation(false);
-    setIsCorrect(null);
-
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
+      calculateScore();
       setQuizFinished(true);
     }
   };
 
-  const handleOptionSelect = (option) => {
-    setSelectedOption(option);
-    setIsCorrect(option === questions[currentQuestionIndex].correctAnswer);
-    setShowExplanation(true); // Always show the explanation after selecting an option
+  const calculateScore = () => {
+    let calculatedScore = 0;
+    questions.forEach((question, index) => {
+      if (selectedOptions[index] === question.correctAnswer) {
+        calculatedScore++;
+      }
+    });
+    setScore(calculatedScore);
   };
 
   if (!questions.length) {
@@ -68,6 +70,50 @@ const MockTest = ({ params }) => {
           Your score is: <span className="font-semibold">{score}</span> /{" "}
           {questions.length}
         </p>
+
+        {/* Display summary of correct and incorrect answers */}
+        <div className="mt-6">
+          <h2 className="text-2xl font-semibold mb-4">Review your answers:</h2>
+          <ul className="space-y-4">
+            {questions.map((question, index) => {
+              const isCorrect =
+                selectedOptions[index] === question.correctAnswer;
+              return (
+                <li
+                  key={index}
+                  className={`p-4 rounded-lg shadow-md ${
+                    isCorrect
+                      ? "bg-green-100 border-green-500"
+                      : "bg-red-100 border-red-500"
+                  }`}
+                >
+                  <p className="font-semibold text-lg">
+                    Q{index + 1}: {question.question}
+                  </p>
+                  <p>
+                    Your answer:{" "}
+                    <span
+                      className={isCorrect ? "text-green-700" : "text-red-700"}
+                    >
+                      {selectedOptions[index]}
+                    </span>
+                  </p>
+                  {!isCorrect && (
+                    <div className="mt-2">
+                      <p className="text-red-700">
+                        Correct answer: {question.correctAnswer}
+                      </p>
+                      <p className="text-gray-700 mt-1">
+                        <strong>Explanation:</strong> {question.explanation}
+                      </p>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
         <button
           onClick={() => router.push("/mocks")}
           className="mt-8 px-6 py-3 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition-all"
@@ -93,12 +139,9 @@ const MockTest = ({ params }) => {
             <li key={index} className="w-full">
               <button
                 onClick={() => handleOptionSelect(option)}
-                disabled={showExplanation} // Disable option selection after answer is shown
                 className={`w-full p-4 text-left border-2 rounded-lg transition-all ${
-                  selectedOption === option
-                    ? isCorrect
-                      ? "border-green-500 bg-green-100 text-green-700"
-                      : "border-red-500 bg-red-100 text-red-700"
+                  selectedOptions[currentQuestionIndex] === option
+                    ? "border-blue-500 bg-blue-100"
                     : "border-gray-300 bg-white hover:bg-gray-100"
                 }`}
               >
@@ -107,29 +150,14 @@ const MockTest = ({ params }) => {
             </li>
           ))}
         </ul>
-
-        {showExplanation && (
-          <div className="mt-4 p-4 rounded-lg bg-gray-100">
-            <p className="font-bold">
-              {isCorrect ? "Correct!" : "Incorrect!"}{" "}
-              {isCorrect
-                ? "You chose the correct answer."
-                : `The correct answer was: ${questions[currentQuestionIndex].correctAnswer}`}
-            </p>
-            <p className="mt-2 text-gray-700">
-              <strong>Explanation:</strong>{" "}
-              {questions[currentQuestionIndex].explanation}
-            </p>
-          </div>
-        )}
       </div>
 
       <div className="text-right">
         <button
           onClick={handleNextQuestion}
-          disabled={!selectedOption}
+          disabled={!selectedOptions[currentQuestionIndex]}
           className={`px-6 py-3 rounded-lg shadow-lg font-semibold text-white transition-all ${
-            !selectedOption
+            !selectedOptions[currentQuestionIndex]
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-blue-600 hover:bg-blue-700"
           }`}

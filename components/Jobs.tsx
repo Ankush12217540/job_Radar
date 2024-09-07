@@ -15,10 +15,10 @@ const Jobs = ({ jobs }) => {
             </p>
             <div className="text-gray-600 mb-4">
               {/* Truncate description to 400 characters */}
-              {job.description.length > 200 ? (
+              {job.description.length > 100 ? (
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: job.description.substring(0, 200) + "...",
+                    __html: job.description.substring(0, 100) + "...",
                   }}
                 />
               ) : (

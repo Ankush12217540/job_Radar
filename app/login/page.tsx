@@ -33,7 +33,9 @@ const Login = () => {
       console.log(res.data);
       if (res.data.success) {
         alert("Login successful!");
+        sessionStorage.setItem("isLoggedIn", "true");
         router.push("/");
+        window.location.reload();
         // Optionally redirect to a dashboard or home page
       } else {
         alert(res.data.message || "Login failed!");

@@ -31,8 +31,8 @@ const ExamPage = () => {
   const stripHtml = (html) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     const textContent = doc.body.textContent || "";
-    return textContent.length > 400
-      ? textContent.substring(0, 400) + "..."
+    return textContent.length > 150
+      ? textContent.substring(0, 150) + "..."
       : textContent;
   };
 
