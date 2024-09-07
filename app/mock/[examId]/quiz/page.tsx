@@ -17,7 +17,7 @@ const MockTest = ({ params }) => {
     const fetchQuestions = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/mock/exam/questions/${examId}`
+          `https://jobradar-backend-1.onrender.com/api/mock/exam/questions/${examId}`
         );
         setQuestions(response.data);
       } catch (error) {
