@@ -13,7 +13,7 @@ const ExamDetailPage = ({ params }) => {
     const fetchExamDetails = async () => {
       try {
         const response = await axios.get(
-          `https://jobradar-backend-1.onrender.com/api/mock/exams/${examId}`
+          `http://localhost:8000/api/mock/exams/${examId}`
         );
         setExam(response.data);
       } catch (error) {

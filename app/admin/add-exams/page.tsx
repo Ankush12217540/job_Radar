@@ -1,14 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import dynamic from "next/dynamic";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css"; // ReactQuill styles
 
-// Dynamically import React Quill to avoid SSR issues
+// Dynamically import ReactQuill without SSR
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const AddExam = () => {
@@ -30,7 +30,7 @@ const AddExam = () => {
     const fetchExams = async () => {
       try {
         const response = await axios.get(
-          "https://jobradar-backend-1.onrender.com/api/mock/exams"
+          "http://localhost:8000/api/mock/exams"
         );
         setExamList(response.data.exams);
       } catch (error) {
@@ -51,7 +51,7 @@ const AddExam = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("https://jobradar-backend-1.onrender.com/api/mock/exam", {
+      const res = await axios.post("http://localhost:8000/api/mock/exam", {
         examName,
         examDescription,
         examDate,
@@ -83,7 +83,7 @@ const AddExam = () => {
 
     setDeletingExamId(examId);
     try {
-      await axios.delete(`https://jobradar-backend-1.onrender.com/api/mock/exam/${examId}`);
+      await axios.delete(`http://localhost:8000/api/mock/exam/${examId}`);
       setExamList((prevExams) =>
         prevExams.filter((exam) => exam._id !== examId)
       ); // Remove the deleted exam from the state

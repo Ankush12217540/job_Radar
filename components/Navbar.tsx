@@ -8,9 +8,14 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
-  const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    // Client-side code here
+    setIsLoggedIn(sessionStorage.getItem("isLoggedIn"));
+  }, []);
 
   return (
     <nav className="flex flex-wrap justify-between items-center p-4 border-b">

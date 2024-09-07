@@ -13,7 +13,7 @@ const JobDetailPage = ({ params }) => {
     const fetchJobDetails = async () => {
       try {
         const response = await axios.get(
-          `https://jobradar-backend-1.onrender.com/api/jobs/${governmentId}`
+          `http://localhost:8000/api/jobs/${governmentId}`
         );
         setJob(response.data.data); // Access job data inside `data`
       } catch (error) {

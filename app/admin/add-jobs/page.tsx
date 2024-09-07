@@ -2,11 +2,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css"; // Quill's styles
+import dynamic from 'next/dynamic'
 
-// Dynamically import React Quill to avoid SSR issues
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 const AddJob = () => {
   const [jobDetails, setJobDetails] = useState({
@@ -30,7 +29,7 @@ const AddJob = () => {
     // Fetch existing job postings
     const fetchJobs = async () => {
       try {
-        const response = await axios.get("https://jobradar-backend-1.onrender.com/api/jobs");
+        const response = await axios.get("http://localhost:8000/api/jobs");
         setJobList(response.data.data);
       } catch (error) {
         console.log("Error fetching jobs:", error);
@@ -68,7 +67,7 @@ const AddJob = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "https://jobradar-backend-1.onrender.com/api/jobs",
+        "http://localhost:8000/api/jobs",
         jobDetails
       );
       alert("Job added successfully!");
@@ -80,7 +79,7 @@ const AddJob = () => {
   // Handle job deletion
   const handleDelete = async (jobId) => {
     try {
-      await axios.delete(`https://jobradar-backend-1.onrender.com/api/jobs/${jobId}`);
+      await axios.delete(`http://localhost:8000/api/jobs/${jobId}`);
       alert("Job deleted successfully!");
       setJobList(jobList.filter((job) => job._id !== jobId)); // Update job list after deletion
     } catch (error) {

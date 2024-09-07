@@ -12,6 +12,7 @@ const Login = () => {
   const [isDisabled, setIsDisabled] = useState(true);
   const [loading, setLoading] = useState(false); // New loading state
   const router = useRouter();
+
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     setIsDisabled(!e.target.value || !password);
@@ -26,7 +27,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true); // Start loading
     try {
-      const res = await axios.post("https://jobradar-backend-1.onrender.com/api/users/login", {
+      const res = await axios.post("http://localhost:8000/api/users/login", {
         email,
         password,
       });
@@ -35,7 +36,7 @@ const Login = () => {
         alert("Login successful!");
         sessionStorage.setItem("isLoggedIn", "true");
         router.push("/");
-        window.location.reload();
+
         // Optionally redirect to a dashboard or home page
       } else {
         alert(res.data.message || "Login failed!");
