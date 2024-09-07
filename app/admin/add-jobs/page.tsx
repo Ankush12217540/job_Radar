@@ -109,7 +109,7 @@ const AddJob = () => {
                 className="w-full p-2 border border-gray-300 rounded-md"
                 value={jobDetails.title}
                 onChange={handleChange}
-                required
+
               />
             </div>
             <div className="mb-4">
@@ -139,7 +139,7 @@ const AddJob = () => {
                 className="w-full p-2 border border-gray-300 rounded-md"
                 value={jobDetails.company}
                 onChange={handleChange}
-                required
+
               />
             </div>
             <div className="mb-4">
@@ -156,7 +156,7 @@ const AddJob = () => {
                 className="w-full p-2 border border-gray-300 rounded-md"
                 value={jobDetails.location}
                 onChange={handleChange}
-                required
+
               />
             </div>
             <div className="mb-4">
@@ -190,7 +190,7 @@ const AddJob = () => {
                 className="w-full p-2 border border-gray-300 rounded-md"
                 value={jobDetails.applyLink}
                 onChange={handleChange}
-                required
+
               />
             </div>
             <div className="mb-4">
@@ -206,7 +206,7 @@ const AddJob = () => {
                 className="w-full p-2 border border-gray-300 rounded-md"
                 value={jobDetails.jobType}
                 onChange={handleChange}
-                required
+
               >
                 <option value="full-time">Full-time</option>
                 <option value="part-time">Part-time</option>
@@ -243,7 +243,7 @@ const AddJob = () => {
                 className="w-full p-2 border border-gray-300 rounded-md"
                 value={jobDetails.jobSector}
                 onChange={handleChange}
-                required
+
               >
                 <option value="Private">Private</option>
                 <option value="Government">Government</option>
@@ -263,7 +263,7 @@ const AddJob = () => {
                 className="w-full p-2 border border-gray-300 rounded-md"
                 value={jobDetails.dueDate}
                 onChange={handleChange}
-                required
+
               />
             </div>
             <div className="mb-4">
