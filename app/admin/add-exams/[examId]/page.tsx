@@ -36,7 +36,7 @@ const AddQuestion = ({ params }) => {
     setLoading(true);
     try {
       const res = await axios.post(
-        "https://jobradar-backend-1.onrender.com/api/mock/exam/question",
+        "http://localhost:8000/api/mock/exam/question",
         {
           examId, // Send examId to associate question with exam
           question,

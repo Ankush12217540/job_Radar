@@ -14,10 +14,18 @@ export default function PrivateJobs() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await axios.get("https://jobradar-backend-1.onrender.com/api/jobs");
+        const res = await axios.get(
+          "http://localhost:8000/api/jobs"
+        );
         const privateJobs = res.data.data.filter(
           (job) => job.jobSector === "Private"
         );
+
+        // Sort jobs by postedDate in descending order
+        privateJobs.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+
         setJobs(privateJobs);
         setFilteredJobs(privateJobs);
         setLoading(false);

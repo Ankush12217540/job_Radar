@@ -27,7 +27,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true); // Start loading
     try {
-      const res = await axios.post("https://jobradar-backend-1.onrender.com/api/users/login", {
+      const res = await axios.post("http://localhost:8000/api/users/login", {
         email,
         password,
       });

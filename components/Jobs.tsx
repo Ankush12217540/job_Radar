@@ -7,7 +7,7 @@ const Jobs = ({ jobs }) => {
         jobs.map((job) => (
           <div
             key={job._id}
-            className="p-6 border rounded-lg shadow-lg bg-white hover:shadow-xl transition-shadow duration-300"
+            className="p-6 border-2 border-red-200 rounded-lg shadow-lg bg-white hover:shadow-xl transition-shadow duration-300"
           >
             <h3 className="text-2xl font-bold text-gray-800">{job.title}</h3>
             <p className="text-lg text-gray-600 mb-2">

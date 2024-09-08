@@ -17,7 +17,7 @@ const MockTest = ({ params }) => {
     const fetchQuestions = async () => {
       try {
         const response = await axios.get(
-          `https://jobradar-backend-1.onrender.com/api/mock/exam/questions/${examId}`
+          `http://localhost:8000/api/mock/exam/questions/${examId}`
         );
         setQuestions(response.data);
       } catch (error) {
@@ -65,7 +65,7 @@ const MockTest = ({ params }) => {
   if (quizFinished) {
     return (
       <div className="container mx-auto p-6 text-center">
-        <h1 className="text-4xl font-bold mb-6">Quiz Finished</h1>
+        <h1 className="text-4xl font-bold mb-6">Mock Test Finished</h1>
         <p className="text-gray-700 text-lg">
           Your score is: <span className="font-semibold">{score}</span> /{" "}
           {questions.length}

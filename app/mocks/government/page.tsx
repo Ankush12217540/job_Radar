@@ -8,6 +8,8 @@ import Link from "next/link"; // Import Link for navigation
 const ExamPage = () => {
   const [exams, setExams] = useState([]);
   const [filteredExams, setFilteredExams] = useState([]);
+  const [categories, setCategories] = useState([]); // To store unique categories
+  const [selectedCategory, setSelectedCategory] = useState(""); // To track selected category
   const router = useRouter();
 
   useEffect(() => {
@@ -15,10 +17,18 @@ const ExamPage = () => {
     const fetchExams = async () => {
       try {
         const response = await axios.get(
-          "https://jobradar-backend-1.onrender.com/api/mock/exams"
+          "http://localhost:8000/api/mock/exams"
         );
-        setExams(response.data.exams);
-        setFilteredExams(response.data.exams); // Initialize filteredExams with all exams
+        const examsData = response.data.exams;
+
+        setExams(examsData);
+        setFilteredExams(examsData); // Initialize filteredExams with all exams
+
+        // Extract unique categories from the exams
+        const uniqueCategories = [
+          ...new Set(examsData.map((exam) => exam.category)),
+        ];
+        setCategories(uniqueCategories);
       } catch (error) {
         console.error("Error fetching exams:", error);
       }
@@ -27,13 +37,28 @@ const ExamPage = () => {
     fetchExams();
   }, []);
 
-  // Function to strip HTML tags and truncate to 400 characters
+  // Function to strip HTML tags and truncate to 75 characters
   const stripHtml = (html) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     const textContent = doc.body.textContent || "";
     return textContent.length > 75
       ? textContent.substring(0, 75) + "..."
       : textContent;
+  };
+
+  // Handle category change
+  const handleCategoryChange = (e) => {
+    const selectedCat = e.target.value;
+    setSelectedCategory(selectedCat);
+
+    if (selectedCat === "") {
+      // If no category is selected, show all exams
+      setFilteredExams(exams);
+    } else {
+      // Filter exams based on selected category
+      const filtered = exams.filter((exam) => exam.category === selectedCat);
+      setFilteredExams(filtered);
+    }
   };
 
   const handleSearch = (query) => {
@@ -51,7 +76,24 @@ const ExamPage = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <SearchBar onSearch={handleSearch} label={"Search for Mock Tests"} />
+      {/* Category Filter */}
+      <div className="mb-6 flex items-center">
+        <select
+          id="category"
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+          className="border rounded-md p-2"
+        >
+          <option value="">All Categories</option>
+          {categories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+        <SearchBar onSearch={handleSearch} label={"Search for Mock Tests"} />
+      </div>
+
       <h1 className="text-3xl font-bold mb-6 text-center">
         Available Mock Tests
       </h1>

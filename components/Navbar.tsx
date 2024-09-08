@@ -6,67 +6,110 @@ import {
   MenubarItem,
   MenubarMenu,
   MenubarTrigger,
+  MenubarSeparator,
 } from "@/components/ui/menubar";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { CiMenuBurger } from "react-icons/ci";
+import { IoMdClose } from "react-icons/io";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Default to closed
+
   useEffect(() => {
     // Client-side code here
     setIsLoggedIn(sessionStorage.getItem("isLoggedIn"));
-  }, []);
+  }, [setIsLoggedIn]);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  console.log(isLoggedIn);
 
   return (
-    <nav className="flex flex-wrap justify-between items-center p-4 border-b">
-      <Link href="/" className="text-3xl font-bold text-blue-600">
-        Job Radar
-      </Link>
+    <nav className="flex flex-col md:flex-row  justify-between gap-8 p-2 m-4">
+      <div className="flex items-center justify-between">
+        <Link href="/" className="text-blue-700 text-2xl font-bold">
+          Job Radar
+        </Link>
 
-      {/* Menu items, available on all screen sizes */}
-      <div className="w-full lg:w-auto flex  lg:flex-row items-center gap-2 lg:gap-y-0 lg:gap-x-8 text-lg text-gray-800 mt-4 lg:mt-0">
-        <Link href="/" className="hover:text-blue-500 border rounded-md p-2">
+        {/* Hamburger menu for login and register */}
+        {isMenuOpen && !isLoggedIn && (
+          <div className="md:hidden flex  gap-2 mt-4">
+            <Link
+              href="/login"
+              className="text-white bg-blue-500 rounded-md px-4 py-2 text-lg font-bold"
+            >
+              Login
+            </Link>
+            <Link
+              href="/register"
+              className="text-white bg-orange-400 rounded-md px-4 py-2 text-lg font-bold"
+            >
+              Register
+            </Link>
+          </div>
+        )}
+        {/* Hamburger button for smaller screens */}
+        <div>
+          <button onClick={toggleMenu} className="md:hidden">
+            {isMenuOpen ? <IoMdClose /> : <CiMenuBurger />}
+          </button>
+        </div>
+      </div>
+
+      {/* Main menu for larger screens */}
+      <div className="flex items-center gap-4 justify-between">
+        <Link
+          href="/"
+          className="text-white bg-red-700 p-2 rounded-md font-bold text-lg"
+        >
           Private Jobs
         </Link>
+
         <Link
           href="/government-jobs"
-          className="hover:text-blue-500 border rounded-md p-2"
+          className="text-white bg-green-700 p-2 rounded-md font-bold text-lg"
         >
           Government Jobs
         </Link>
 
-        <Menubar>
+        <Menubar className="bg-yellow-700 ">
           <MenubarMenu>
-            <MenubarTrigger className="hover:text-blue-500 text-lg p-2">
+            <MenubarTrigger className="text-lg text-white font-bold bg-yellow-700  ">
               Mock Tests
             </MenubarTrigger>
             <MenubarContent>
               <MenubarItem>
-                <Link href="/mocks/private">Private Tests</Link>
+                <Link href="/mocks/private">Private</Link>
               </MenubarItem>
+              <MenubarSeparator />
               <MenubarItem>
-                <Link href="/mocks/government">Government Tests</Link>
+                <Link href="/mocks/government">Government</Link>
               </MenubarItem>
             </MenubarContent>
           </MenubarMenu>
         </Menubar>
       </div>
 
-      {/* Login and Register Buttons */}
       <div
-        className={`w-full lg:w-auto ${
-          isLoggedIn ? "hidden" : "flex"
-        } flex flex-col lg:flex-row gap-y-2 lg:gap-x-4 mt-4 lg:mt-0`}
+        className={`hidden ${
+          isLoggedIn ? "hidden" : "md:flex"
+        } items-center justify-between gap-4`}
       >
-        <Link href="/login">
-          <Button variant="outline" className="w-full lg:w-auto">
-            Login
-          </Button>
+        <Link
+          href="/login"
+          className="text-white bg-blue-500 rounded-md px-4 py-2 text-lg font-bold"
+        >
+          Login
         </Link>
-        <Link href="/register">
-          <Button className="w-full lg:w-auto bg-orange-500 text-white hover:bg-orange-600">
-            Register
-          </Button>
+        <Link
+          href="/register"
+          className="text-white bg-orange-400 rounded-md px-4 py-2 text-lg font-bold"
+        >
+          Register
         </Link>
       </div>
     </nav>

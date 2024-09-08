@@ -43,10 +43,10 @@ const Filter = ({ onFilterChange }) => {
     <div className="border-2 border-gray-300 rounded-lg shadow-lg bg-white mx-4 my-4">
       {/* Toggle Button */}
       <div
-        className="p-6 border-b border-gray-200 cursor-pointer flex justify-between items-center"
+        className="p-2 border-b border-gray-200 cursor-pointer flex justify-between items-center"
         onClick={toggleExpand}
       >
-        <h2 className="text-2xl font-bold text-gray-800">Filters</h2>
+        <h2 className=" font-bold text-gray-800">Filters</h2>
         <button className="text-blue-600 hover:text-blue-700 focus:outline-none">
           {isExpanded ? "Hide" : "Show"}
         </button>

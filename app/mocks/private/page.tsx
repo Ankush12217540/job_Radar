@@ -15,7 +15,7 @@ const ExamPage = () => {
     const fetchExams = async () => {
       try {
         const response = await axios.get(
-          "https://jobradar-backend-1.onrender.com/api/mock/exams"
+          "http://localhost:8000/api/mock/exams"
         );
         setExams(response.data.exams);
         setFilteredExams(response.data.exams); // Initialize filteredExams with all exams

@@ -16,6 +16,7 @@ const AddExam = () => {
   const [examDescription, setExamDescription] = useState("");
   const [examDate, setExamDate] = useState("");
   const [examDuration, setExamDuration] = useState("");
+  const [category, setCategory] = useState(""); // Add state for category
   const [isDisabled, setIsDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
   const [examList, setExamList] = useState([]);
@@ -30,7 +31,7 @@ const AddExam = () => {
     const fetchExams = async () => {
       try {
         const response = await axios.get(
-          "https://jobradar-backend-1.onrender.com/api/mock/exams"
+          "http://localhost:8000/api/mock/exams"
         );
         setExamList(response.data.exams);
       } catch (error) {
@@ -44,18 +45,21 @@ const AddExam = () => {
   }, []);
 
   const handleInputChange = () => {
-    setIsDisabled(!examName || !examDescription || !examDate || !examDuration);
+    setIsDisabled(
+      !examName || !examDescription || !examDate || !examDuration || !category
+    );
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("https://jobradar-backend-1.onrender.com/api/mock/exam", {
+      const res = await axios.post("http://localhost:8000/api/mock/exam", {
         examName,
         examDescription,
         examDate,
         examDuration,
+        category, // Send category in the POST request
       });
 
       if (res.data) {
@@ -64,6 +68,7 @@ const AddExam = () => {
         setExamDescription("");
         setExamDate("");
         setExamDuration("");
+        setCategory(""); // Clear the category as well
         setIsDisabled(true);
 
         // Refresh exam list
@@ -83,7 +88,7 @@ const AddExam = () => {
 
     setDeletingExamId(examId);
     try {
-      await axios.delete(`https://jobradar-backend-1.onrender.com/api/mock/exam/${examId}`);
+      await axios.delete(`http://localhost:8000/api/mock/exam/${examId}`);
       setExamList((prevExams) =>
         prevExams.filter((exam) => exam._id !== examId)
       ); // Remove the deleted exam from the state
@@ -155,6 +160,21 @@ const AddExam = () => {
                 value={examDuration}
                 onChange={(e) => {
                   setExamDuration(e.target.value);
+                  handleInputChange();
+                }}
+                className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div className="mb-4">
+              <Label htmlFor="category" className="text-gray-700">
+                Category
+              </Label>
+              <Input
+                type="text"
+                placeholder="Enter Category"
+                value={category}
+                onChange={(e) => {
+                  setCategory(e.target.value);
                   handleInputChange();
                 }}
                 className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
