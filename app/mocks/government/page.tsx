@@ -82,17 +82,17 @@ const ExamPage = () => {
           id="category"
           value={selectedCategory}
           onChange={handleCategoryChange}
-          className="border rounded-md p-2"
+          className="border rounded-md p-2 w-full"
         >
-          <option value="">All Categories</option>
+          <option value="" className="w-full">All Categories</option>
           {categories.map((category) => (
             <option key={category} value={category}>
               {category}
             </option>
           ))}
         </select>
-        <SearchBar onSearch={handleSearch} label={"Search for Mock Tests"} />
       </div>
+      <SearchBar onSearch={handleSearch} label={"Search for Mock Tests"} />
 
       <h1 className="text-3xl font-bold mb-6 text-center">
         Available Mock Tests

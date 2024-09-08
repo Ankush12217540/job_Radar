@@ -14,7 +14,7 @@ const SearchBar = ({ onSearch, label }) => {
   };
 
   return (
-    <div className="w-4/5 mx-auto my-4 flex items-center">
+    <div className="w-full mx-auto my-4 flex items-center">
       <input
         placeholder={label ? label : "Find your dream job here"}
         className="w-full p-4 bg-slate-100 rounded-l-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
