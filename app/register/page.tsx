@@ -47,7 +47,7 @@ const Register = () => {
       } else {
         alert(res.data.message || "Registration failed!");
       }
-    } catch (error) {
+    } catch (error) {Ï
       console.error("Error registering user:", error);
       alert("An error occurred. Please try again.");
     } finally {

@@ -1,35 +1,28 @@
 "use client";
 import Link from "next/link";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarTrigger,
-  MenubarSeparator,
-} from "@/components/ui/menubar";
-import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { CiMenuBurger } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Default to closed
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
-    // Client-side code here
     setIsLoggedIn(sessionStorage.getItem("isLoggedIn"));
-  }, [setIsLoggedIn]);
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  console.log(isLoggedIn);
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
   return (
-    <nav className="flex flex-col md:flex-row  justify-between gap-8 p-2 m-4">
+    <nav className="flex flex-col md:flex-row justify-between gap-8 p-2 m-4">
       <div className="flex items-center justify-between">
         <Link href="/" className="text-blue-700 text-2xl font-bold">
           Job Radar
@@ -37,7 +30,7 @@ const Navbar = () => {
 
         {/* Hamburger menu for login and register */}
         {isMenuOpen && !isLoggedIn && (
-          <div className="md:hidden flex  gap-2 mt-4">
+          <div className="md:hidden flex gap-2 mt-4">
             <Link
               href="/login"
               className="text-white bg-blue-500 rounded-md px-4 py-2 text-lg font-bold"
@@ -52,6 +45,7 @@ const Navbar = () => {
             </Link>
           </div>
         )}
+
         {/* Hamburger button for smaller screens */}
         <div>
           <button onClick={toggleMenu} className="md:hidden">
@@ -76,22 +70,31 @@ const Navbar = () => {
           Government Jobs
         </Link>
 
-        <Menubar className="bg-yellow-700 ">
-          <MenubarMenu>
-            <MenubarTrigger className="text-lg text-white font-bold bg-yellow-700  ">
-              Mock Tests
-            </MenubarTrigger>
-            <MenubarContent>
-              <MenubarItem>
-                <Link href="/mocks/private">Private</Link>
-              </MenubarItem>
-              <MenubarSeparator />
-              <MenubarItem>
-                <Link href="/mocks/government">Government</Link>
-              </MenubarItem>
-            </MenubarContent>
-          </MenubarMenu>
-        </Menubar>
+        {/* Mock Tests with Dropdown */}
+        <div className="relative">
+          <button
+            onClick={toggleDropdown}
+            className="text-lg text-white font-bold bg-yellow-700 p-2 rounded-md flex items-center"
+          >
+            Mock Tests
+          </button>
+          {isDropdownOpen && (
+            <div className="absolute top-full left-0 mt-2 w-48 bg-white shadow-lg rounded-md flex flex-col text-black">
+              <Link
+                href="/mocks/private"
+                className="hover:bg-gray-200 px-4 py-2"
+              >
+                Private
+              </Link>
+              <Link
+                href="/mocks/government"
+                className="hover:bg-gray-200 px-4 py-2"
+              >
+                Government
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
 
       <div
@@ -117,3 +120,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+ 
