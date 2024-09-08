@@ -75,7 +75,7 @@ export default function PrivateJobs() {
   };
 
   return (
-    <div className="w-full lg:max-w-7xl mx-auto flex flex-col">
+    <div className="w-full lg:max-w-7xl mx-auto flex flex-col p-4">
       {loading ? (
         <Loader />
       ) : (
