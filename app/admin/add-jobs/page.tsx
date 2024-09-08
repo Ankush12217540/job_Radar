@@ -30,7 +30,7 @@ const AddJob = () => {
     const fetchJobs = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/jobs"
+          "https://jobradar-backend-1.onrender.com/api/jobs"
         );
         setJobList(response.data.data);
       } catch (error) {
@@ -69,7 +69,7 @@ const AddJob = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/jobs",
+        "https://jobradar-backend-1.onrender.com/api/jobs",
         jobDetails
       );
       alert("Job added successfully!");
@@ -82,7 +82,7 @@ const AddJob = () => {
   const handleDelete = async (jobId) => {
     try {
       await axios.delete(
-        `http://localhost:8000/api/jobs/${jobId}`
+        `https://jobradar-backend-1.onrender.com/api/jobs/${jobId}`
       );
       alert("Job deleted successfully!");
       setJobList(jobList.filter((job) => job._id !== jobId)); // Update job list after deletion

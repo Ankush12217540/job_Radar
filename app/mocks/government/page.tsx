@@ -17,7 +17,7 @@ const ExamPage = () => {
     const fetchExams = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/mock/exams"
+          "https://jobradar-backend-1.onrender.com/api/mock/exams"
         );
         const examsData = response.data.exams;
 

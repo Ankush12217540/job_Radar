@@ -15,7 +15,7 @@ export default function PrivateJobs() {
     const fetchJobs = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/jobs"
+          "https://jobradar-backend-1.onrender.com/api/jobs"
         );
         const privateJobs = res.data.data.filter(
           (job) => job.jobSector === "Private"

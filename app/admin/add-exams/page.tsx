@@ -31,7 +31,7 @@ const AddExam = () => {
     const fetchExams = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/mock/exams"
+          "https://jobradar-backend-1.onrender.com/api/mock/exams"
         );
         setExamList(response.data.exams);
       } catch (error) {
@@ -54,7 +54,7 @@ const AddExam = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8000/api/mock/exam", {
+      const res = await axios.post("https://jobradar-backend-1.onrender.com/api/mock/exam", {
         examName,
         examDescription,
         examDate,
@@ -88,7 +88,7 @@ const AddExam = () => {
 
     setDeletingExamId(examId);
     try {
-      await axios.delete(`http://localhost:8000/api/mock/exam/${examId}`);
+      await axios.delete(`https://jobradar-backend-1.onrender.com/api/mock/exam/${examId}`);
       setExamList((prevExams) =>
         prevExams.filter((exam) => exam._id !== examId)
       ); // Remove the deleted exam from the state

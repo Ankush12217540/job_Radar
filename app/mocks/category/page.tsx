@@ -12,7 +12,7 @@ const CategorySelectionPage = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/mock/categories"
+          "https://jobradar-backend-1.onrender.com/api/mock/categories"
         );
         setCategories(response.data.categories);
       } catch (error) {
